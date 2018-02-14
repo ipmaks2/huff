@@ -14,6 +14,14 @@ struct tHuffNode {
 } ;
 
 
+int is_present(char * string, char c){
+    for (int i=0; string[i]!=0; i++){
+        if (string[i] == c)
+            return 1;
+    }
+    return 0;
+}
+
 int check_buff( void* buff ){
     if (buff == NULL) {
         printf("Error while allocating new memory\n");
@@ -41,31 +49,50 @@ struct tHuffNode * newNode(void){
 
 }
 
-void appendNode(struct tHuffNode*  p,  char c){
+int appendNodeL(struct tHuffNode*  p,  char c){
+    int i = 0;
+    printf("\nStartd cycle for letter %c\n", c); 
+    do 
+    {
      if (! strlen(p->value) && (!p->count)) {
          memset( p->value, c, sizeof(char)*1);  
          p->count = 1;
+         printf("Added %s as new value\n", p->value);
+         printf("Value:%s\n", p->value);
+         printf("Count:%d\n", p->count);
+         return 0;
      } 
      else {
-         if (p->value == c) {
+         if (is_present(p->value, c)) {
              p->count++;
+             printf("Increment for existed char\n");
+             printf("Value:%s\n", p->value);
+             printf("Count:%d\n", p->count);
+            return 0;
          } 
          
          else {
-
-             while (p->l) {
+             // go deeper
+             // or
+             // create next level
+             if (p->l) {
                  p = p->l;
+                 printf("Go deeper in left tree\n");
              }
-           
-         p = newNode();
-         memset( p->value, c, sizeof(char)*1);  
-         p->count = 1;
+             else {
+                 p->l = newNode();
+                 p = p->l;
+                 printf("Created new node for left tree\n");
+             }
+         
+         }
 
-     }
-
-     printf("Value:%s\n", p->value);
-     printf("Count:%d\n", p->count);
-     printf("Size: %d\n", p->size);
+     }   
+     
+    printf("Next cycle %d\n", i++);
+    } while (i<=256); // as we have 255 values in a byte, we should not go deeper 256 levels
+    return 1; //Error - we reached too deep level
+    //printf("Size: %d\n", p->size);
 }    
 
 
@@ -79,7 +106,7 @@ int main() {
 
     for (int i =0; text[i] != 0; i++) {
         // printf("%c\n", text[i]);
-        appendNode(rootNode,text[i]);
+        appendNodeL(rootNode,text[i]);
     }
 
     // TODO free mem - for all nodes
