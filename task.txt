@@ -1,0 +1,15 @@
+
+Practice: Implementing Huffman archiever
+
+huff ifile [-c|-x] ofile
+
+Implement a make-file for building the archiver with 'all' and 'clean' targets
+
+- work
+- time of arch
+- optimization
+- binar files, bit operators, 
+
+Program should not crash-dump.
+Accepted only correct exit with error messages.
+
