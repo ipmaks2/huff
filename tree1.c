@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #define  CHARBLOCK 10
 #define  DEBUG 1
 
@@ -12,6 +13,7 @@ struct tHuffNode {
     struct tHuffNode* r; 
     
 } ;
+
 
 
 int is_present(char * string, char c){
@@ -44,10 +46,27 @@ struct tHuffNode * newNode(void){
    buffer->size = CHARBLOCK;
    buffer->value = charbuff;
    buffer->count = 0;
+   buffer->l = NULL;
+   buffer->r = NULL;
 
    return buffer;
 
 }
+
+int debugnode(struct tHuffNode* p) {
+    
+    printf("Value:'%s'\n", p->value);
+    printf("Count:%d\n", p->count);    
+    printf("Node address %d\n", p); 
+}
+
+int debuglog(char* message, struct tHuffNode* p){
+    if ( DEBUG ){
+        printf(message);
+        printf("\n");
+        debugnode(p);
+    }    
+}    
 
 int appendNodeL(struct tHuffNode*  p,  char c){
     int i = 0;
@@ -57,18 +76,15 @@ int appendNodeL(struct tHuffNode*  p,  char c){
      if (! strlen(p->value) && (!p->count)) {
          memset( p->value, c, sizeof(char)*1);  
          p->count = 1;
-         printf("Added %s as new value\n", p->value);
-         printf("Value:%s\n", p->value);
-         printf("Count:%d\n", p->count);
+         debuglog("Added as new value", p);
+         
          return 0;
      } 
      else {
          if (is_present(p->value, c)) {
              p->count++;
-             printf("Increment for existed char\n");
-             printf("Value:%s\n", p->value);
-             printf("Count:%d\n", p->count);
-            return 0;
+             debuglog("Increment for existed char", p);
+             return 0;
          } 
          
          else {
@@ -77,12 +93,12 @@ int appendNodeL(struct tHuffNode*  p,  char c){
              // create next level
              if (p->l) {
                  p = p->l;
-                 printf("Go deeper in left tree\n");
+                 debuglog("Go deeper in left tree", p);
              }
              else {
                  p->l = newNode();
                  p = p->l;
-                 printf("Created new node for left tree\n");
+                 debuglog("Created new node for left tree", p);
              }
          
          }
