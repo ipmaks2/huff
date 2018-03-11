@@ -75,52 +75,17 @@ int printNodes(struct tHuffNode* p){
     return 0;
 }
 
-int appendNodeBalanced(struct tHuffNode*  p,  char c){
-    int i = 0;
-    do 
-    {
-		if (! strlen(p->value) ) {
-			 // memset( p->value, c, sizeof(char)*1);  
-			 add_char(p->value, p->size, c);
-			 p->count = 1;
-			 return 0;
-		} 
-		else {
-			 if (is_present(p->value, c)) {
-				 p->count++;
-				 if (len(p->value) == 1) 
-					 return 0;
-			 } 
-		}     
-  
-	    if ((p->l) && ( (is_present(p->l->value, c)) || (len(p->l->value, c) < len(p->r->value, c)) ) ) {
-		    p = p->l;
-	    } else 
-	    
-	    if ((p->r) && (is_present(p->r->value, c)) {
-		
-		
-		
-	    else {
-		    p->l = newNode();
-		    p = p->l;
-	    }
-         
-
-       
-    } while (i<=256); // as we have 255 values in a byte, we should not go deeper 256 levels
-    return 1; //Error - we reached too deep level
-}    
 
 
-int appendNodeL(struct tHuffNode*  p,  char c){
+int appendNode(struct tHuffNode*  p,  char c){
     int i = 0;
     printf("\nStartd cycle for letter %c\n", c); 
     do 
     {
      if (! strlen(p->value) && (!p->count)) {
-         memset( p->value, c, sizeof(char)*1);  
-         p->count = 1;
+         if (add_char(p->value, p->size, c))
+		     return 1;
+         p->count++;
          printf("Added %s as new value\n", p->value);
          printf("Value:%s\n", p->value);
          printf("Count:%d\n", p->count);
@@ -132,34 +97,40 @@ int appendNodeL(struct tHuffNode*  p,  char c){
              printf("Increment for existed char\n");
              printf("Value:%s\n", p->value);
              printf("Count:%d\n", p->count);
-            return 0;
-         } 
-         
-         else {
-             if (p->l) {
-                 p = p->l;
-                 printf("Go deeper in left tree\n");
-             }
-             else {
-                 p->l = newNode();
-                 p = p->l;
-                 printf("Created new node for left tree\n");
-             }
-         
+			 
+			 if  (strlen(p->value) == 1)
+                 return 0;
          }
+		 
+         
+         
+	 if (p->l) {
+		 add_char(p->value, p->size, c);
+		 p->count++;
+		 p = p->l;
+		 printf("Go deeper in left tree\n");
+	 }
+	 else {
+		 p->l = newNode();
+		 p = p->l;
+		 printf("Created new node for left tree\n");
+	 }
+         
+         
 
      }   
      
     printf("Next cycle %d\n", i++);
     } while (i<=256); // as we have 255 values in a byte, we should not go deeper 256 levels
+	printf("Size: %d\n", p->size);
     return 1; //Error - we reached too deep level
-    //printf("Size: %d\n", p->size);
+    
 }    
 
 
 
 int main() {
-    char text[] = "This is testing text for building bin tree, used in arhiving tool.\n";
+    char text[] = "This is testing text for building bin tree, used in archiving tool.\n";
     // TODO chech with \0 character later
     struct tHuffNode* rootNode;
     printf("%s\n", text);
@@ -167,7 +138,9 @@ int main() {
 
     for (int i =0; text[i] != 0; i++) {
         // printf("%c\n", text[i]);
-        appendNodeL(rootNode,text[i]);
+        if (appendNode(rootNode,text[i]))
+			break;
+		
     }
     //
     printf("\n\n\n\n");
