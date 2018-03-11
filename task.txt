@@ -13,3 +13,39 @@ Implement a make-file for building the archiver with 'all' and 'clean' targets
 Program should not crash-dump.
 Accepted only correct exit with error messages.
 
+################
+Q: what to do with 0 char, from input file?
+
+Parse input arguments.
+Check free space for output file.
+
+Read buffer of chars (with tunable size) into memory, could depend on available memory.
+Count frequency of bytes (chars), array or struct
+Build BIN tree, to count replacement bits, int n-bits, and int mask.  (is it needed to check Big/Low endian?)
+Build transorm table, could be same table as for frequency (same array of struct)
+
+Output of signature, to check, input file realy with arhived data
+Output transformed table to output file.
+Output transformed bits to file (open file for cacheble writing)
+While extract, be prepared for corrupted structures in input file.
+
+
+################
+
+Write unit tests - for every function
+Write integration tests to run program from cmd
+
+Run tests on different systems, like: 
+ - DOS, FreeDOS 32, 64.
+ - Win32, Win64, Old Win16?,
+ - CygWin 32, 64.
+ - Linux 32, linux64, Linux 16 (if possible on old kernels, or any unix like
+ - FreeBSD 16,32,64
+ - ARM  QEMU
+
+Start TC preparation during writing the program.
+Test cases  for Arch, Extract, with separate input, or input from other program output.
+
+
+
+
